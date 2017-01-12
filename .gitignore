@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+
+# Logging
+*.log
+tmp
+logs
+*.log
+logfile.txt
+
+# Dependencies
+node_modules
