@@ -1,0 +1,14 @@
+{
+	"cards": [
+		{
+			"name": "veteran instincts",
+			"alias": ["vi"],
+			"limited": false,
+			"uniquie": false,
+			"type": "EPT",
+			"cost": "2",
+			"text": "Increase your pilot skill value by 2.",
+			"image": "https://images-cdn.fantasyflightgames.com/filer_public/d3/d4/d3d46037-3cce-499b-af43-550b6510e12b/veteran-instincts.png"
+		}
+	]
+}

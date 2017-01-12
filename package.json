@@ -1,0 +1,13 @@
+{
+  "name": "SlackXWingCardCmd",
+  "version": "1.0.0",
+  "description": "Card command for slack that gives details of the specified card in XWing",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "micro": "^6.1.0"
+  },
+  "scripts": {
+    "start": "micro"
+  }
+}
