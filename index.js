@@ -3,18 +3,36 @@ const qs       = require('querystring');
 const url      = require('url');
 const db       = require('./db');
 
+const baseResponse = {
+	parse:         'full',
+	response_type: 'in_channel',
+	text:          '',
+	attachments:   [],
+	unfurl_media:  true
+};
+
 function findCard(queryString) {
 	return db.cards.filter((card) => queryString === card.name);
 }
 
-function convertCardToResponse(card) {
+function populateTemplate(card) {
 	return `${card.name} (${card.type}) - ${card.cost}pt${card.cost > 1 ? 's': ''}
-${card.text}
-${card.image}`;
+${card.text}`;
 }
 
-module.exports = async function (req, res) {
-	const query       = qs.parse(url.parse(req.url).query);
+function convertCardToResponse(card) {
+	let responseObject = Object.assign({}, baseResponse);
+
+	responseObject.attachments = [{
+		image_url: card.image
+	}];
+
+	responseObject.text = populateTemplate(card);
+
+	return responseObject;
+}
+
+function handleGoodRequest(query, res) {
 	let foundCards    = findCard(query.text.toLowerCase());
 	const resultCount = foundCards.length;
 
@@ -24,6 +42,20 @@ module.exports = async function (req, res) {
 		send(res, 200, convertCardToResponse(foundCards[0]));
 	} else {
 		send(res, 200, 'more than one card');
+	}
+}
+
+function handleBadRequest(res) {
+	send(res, 200, 'There was an error with the request');
+}
+
+module.exports = async function (req, res) {
+	const query = qs.parse(url.parse(req.url).query);
+
+	if(!query.text) {
+		handleBadRequest(res);
+	} else {
+		handleGoodRequest(query, res);
 	}
 
 }

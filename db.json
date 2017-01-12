@@ -6,9 +6,19 @@
 			"limited": false,
 			"uniquie": false,
 			"type": "EPT",
-			"cost": "2",
+			"cost": "1",
 			"text": "Increase your pilot skill value by 2.",
 			"image": "https://images-cdn.fantasyflightgames.com/filer_public/d3/d4/d3d46037-3cce-499b-af43-550b6510e12b/veteran-instincts.png"
+		},
+		{
+			"name": "long range scanner",
+			"alias": ["lrs"],
+			"limited": false,
+			"uniquie": false,
+			"type": "Modification",
+			"cost": "0",
+			"text": "You can acquire target locks on ships at Range 3 and beyond. You cannot acquire target locks on ships at Range 1-2. You can equip this card only if you have Torpedo and Missile in your upgrade bar.",
+			"image": "https://images-cdn.fantasyflightgames.com/filer_public/1f/07/1f07c422-aaee-4bd1-bff7-76731a62e53b/swx52-long-range-scanners.png"
 		}
 	]
 }
