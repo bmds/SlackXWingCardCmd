@@ -1,0 +1,20 @@
+{
+	"parser": "babel-eslint",
+	"parserOptions": {
+		"ecmaVersion":  7
+	},
+	"env": {
+		"node":    true
+	},
+	"extends": "eslint:recommended",
+	"rules": {
+		"eqeqeq":       "error",
+		"strict":       "error",
+		"camelcase":    "error",
+		"comma-dangle": ["error", "never"],
+		"func-names":   ["error", "always"],
+		"quotes":       ["error", "single"],
+		"quote-props":  ["error", "as-needed"],
+		"yoda":         "error"
+	}
+}
