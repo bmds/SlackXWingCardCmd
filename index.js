@@ -29,7 +29,7 @@ function populateMultipleCardTemplate(currentString, card) {
 		currentString = populateMultipleCardTemplate('', currentString);
 	}
 
-	return currentString + `\n• ${card.name} (${card.slot})`;
+	return currentString + `\n• ${card.name} (${card.slot}) use \`/card ${card.name}\``;
 }
 
 function createResponseObject(data) {
