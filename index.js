@@ -3,13 +3,14 @@ const qs       = require('querystring');
 const url      = require('url');
 const db       = require('./lib/data.json');
 
+const RESPONSE_PUBLIC  = 'in_channel';
+const RESPONSE_PRIVATE = 'ephemeral';
+
 // Required names for slack
 /*eslint-disable camelcase */
 const baseResponse = {
 	parse:         'full',
-	response_type: 'in_channel',
 	text:          '',
-	attachments:   [],
 	unfurl_media:  true
 };
 /*eslint-enable camelcase */
@@ -23,45 +24,86 @@ function populateTemplate(card) {
 ${card.text}`;
 }
 
-function convertCardToResponse(card) {
+function populateMultipleCardTemplate(currentString, card) {
+	if(typeof currentString === 'object') {
+		currentString = populateMultipleCardTemplate('', currentString);
+	}
+
+	return currentString + `\n• ${card.name} (${card.slot})`;
+}
+
+function createResponseObject(data) {
 	let responseObject = Object.assign({}, baseResponse);
+
+	responseObject.text = data.text;
+
+	if(data.image) {
+		responseObject.attachments = getImageAttachment(data.image);
+	}
 
 	// Required names for slack
 	/*eslint-disable camelcase */
-	responseObject.attachments = [{
-		image_url: card.image
-	}];
+	responseObject.response_type = (!data.isPrivate ? RESPONSE_PUBLIC : RESPONSE_PRIVATE);
 	/*eslint-enable camelcase */
-
-	responseObject.text = populateTemplate(card);
 
 	return responseObject;
 }
 
-function handleGoodRequest(query, res) {
+function getImageAttachment(image) {
+	// Required names for slack
+	/*eslint-disable camelcase */
+	return [{
+		image_url: image
+	}];
+	/*eslint-enable camelcase */
+}
+
+function convertCardToResponse(card) {
+	let responseData = {
+		text:      populateTemplate(card),
+		image:     card.image,
+		isPrivate: false
+	};
+
+	return createResponseObject(responseData);
+}
+
+function handleMultipleCards(foundCards, query) {
+	let cardString = foundCards.reduce(populateMultipleCardTemplate);
+
+	return createResponseObject({
+		text:      `I found more than one card matching *'${query.text}'*:${cardString}`,
+		isPrivate: true
+	});
+}
+
+function handleGoodRequest(query) {
 	let foundCards    = findCard(query.text.toLowerCase());
 	const resultCount = foundCards.length;
 
 	if(resultCount === 0) {
-		send(res, 200, `Sorry i couldn't find a card for '${query.text}'`);
+		return createResponseObject({
+			text:      `Sorry i couldn't find a card for *'${query.text}'*`,
+			isPrivate: true
+		});
 	} else if(resultCount === 1) {
-		send(res, 200, convertCardToResponse(foundCards[0]));
+		return convertCardToResponse(foundCards[0]);
 	} else {
-		send(res, 200, 'more than one card');
+		return handleMultipleCards(foundCards, query);
 	}
 }
 
-function handleBadRequest(res) {
-	send(res, 200, 'There was an error with the request');
+function handleBadRequest() {
+	return 'There was an error with the request';
 }
 
 module.exports = async function BaseHandler(req, res) {
 	const query = qs.parse(url.parse(req.url).query);
 
 	if(!query.text) {
-		handleBadRequest(res);
+		send(res, 200, handleBadRequest(query));
 	} else {
-		handleGoodRequest(query, res);
+		send(res, 200, handleGoodRequest(query));
 	}
 
 }
