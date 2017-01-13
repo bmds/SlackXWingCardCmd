@@ -17,6 +17,7 @@ const ALLOWED_FILTERS = [
 	'elite',
 	'hardpoint',
 	'illicit',
+	'pilot',
 	'missile',
 	'modification',
 	'salvaged astromech',
