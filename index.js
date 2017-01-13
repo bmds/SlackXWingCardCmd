@@ -16,7 +16,7 @@ const baseResponse = {
 /*eslint-enable camelcase */
 
 function findCard(queryString) {
-	return db.filter((card) => queryString === card.key);
+	return db.filter((card) => card.key.includes(queryString));
 }
 
 function populateTemplate(card) {
