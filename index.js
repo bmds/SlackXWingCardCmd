@@ -6,6 +6,28 @@ const db       = require('./lib/data.json');
 const RESPONSE_PUBLIC  = 'in_channel';
 const RESPONSE_PRIVATE = 'ephemeral';
 
+const FILTER_REGEX = /\((\w)+\)/g;
+
+const ALLOWED_FILTERS = [
+	'astromech',
+	'bomb',
+	'cannon',
+	'cargo',
+	'crew',
+	'elite',
+	'hardpoint',
+	'illicit',
+	'missile',
+	'modification',
+	'salvaged astromech',
+	'system',
+	'team',
+	'tech',
+	'title',
+	'torpedo',
+	'turret'
+];
+
 // Required names for slack
 /*eslint-disable camelcase */
 const baseResponse = {
@@ -15,8 +37,16 @@ const baseResponse = {
 };
 /*eslint-enable camelcase */
 
-function findCard(queryString) {
-	return db.filter((card) => card.key.includes(queryString));
+function findCard(query) {
+	return db.filter((card) => {
+		let isMatch = card.key.includes(query.term);
+
+		if(isMatch && query.filter) {
+			isMatch = query.filter.includes(card.slot);
+		}
+
+		return isMatch;
+	});
 }
 
 function populateTemplate(card) {
@@ -29,7 +59,7 @@ function populateMultipleCardTemplate(currentString, card) {
 		currentString = populateMultipleCardTemplate('', currentString);
 	}
 
-	return currentString + `\n• ${card.name} (${card.slot}) use \`/card ${card.name}\``;
+	return currentString + `\n• ${card.name} (${card.slot}) use \`/card ${card.name} (${card.slot})\``;
 }
 
 function createResponseObject(data) {
@@ -77,8 +107,45 @@ function handleMultipleCards(foundCards, query) {
 	});
 }
 
+function formatFilters(filter) {
+	filter = filter.replace(/\(|\)/g, '')
+		.trim()
+		.toLowerCase();
+
+	if(!ALLOWED_FILTERS.includes(filter)) {
+		filter = '';
+	}
+
+	return filter;
+}
+
+function parseFilters(queryText) {
+	// Get any requested filters
+	let filters   = queryText.match(FILTER_REGEX);
+	if(filters) {
+		filters = filters.map(formatFilters).filter((theFilter) => theFilter.length > 0);
+		// Store if we have any after filtering
+		return (filters.length > 0 ? filters : false);
+	}
+	return false;
+}
+
+function formatSearch(term) {
+	// Make sure we only compare in lowercase
+	term       = term.toLowerCase();
+	let filter = parseFilters(term);
+	// Strip the filter string from the search text
+	term       = term.replace(FILTER_REGEX, '').trim();
+
+	return {
+		term,
+		filter
+	};
+}
+
 function handleGoodRequest(query) {
-	let foundCards    = findCard(query.text.toLowerCase());
+	const search      = formatSearch(query.text);
+	const foundCards  = findCard(search);
 	const resultCount = foundCards.length;
 
 	if(resultCount === 0) {
