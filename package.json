@@ -16,7 +16,7 @@
     "eslint": "^3.13.1"
   },
   "scripts": {
-    "start": "micro",
+    "start": "micro -p $PORT",
     "lint": "eslint index.js \"**/*.js\""
   }
 }
