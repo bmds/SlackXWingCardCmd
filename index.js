@@ -7,6 +7,7 @@ const RESPONSE_PUBLIC  = 'in_channel';
 const RESPONSE_PRIVATE = 'ephemeral';
 
 const FILTER_REGEX = /\((\w)+\)/g;
+const ID_REGEX     = /(#\w+)/g;
 
 const ALLOWED_FILTERS = [
 	'astromech',
@@ -29,6 +30,11 @@ const ALLOWED_FILTERS = [
 	'turret'
 ];
 
+const ALLOWED_FLAGS = [
+	'id',
+	'quiet'
+];
+
 // Required names for slack
 /*eslint-disable camelcase */
 const baseResponse = {
@@ -38,16 +44,26 @@ const baseResponse = {
 };
 /*eslint-enable camelcase */
 
-function findCard(query) {
-	return db.filter((card) => {
-		let isMatch = card.key.includes(query.term);
+function matchCardByName(query, card) {
+	let isMatch = card.key.includes(query.term);
 
-		if(isMatch && query.filter) {
-			isMatch = query.filter.includes(card.slot);
-		}
+	if(isMatch && query.filter) {
+		isMatch = query.filter.includes(card.slot);
+	}
 
-		return isMatch;
-	});
+	return isMatch;
+}
+
+function matchCardById(query, card) {
+	return card.id === query.term;
+}
+
+function searchCards(query) {
+	if(query.isId) {
+		query.term = parseInt(query.term, 10);
+		return [db.find((card) => matchCardById(query, card))];
+	}
+	return db.filter((card) => matchCardByName(query, card));
 }
 
 function populateTemplate(card) {
@@ -63,7 +79,7 @@ function populateMultipleCardTemplate(currentString, card) {
 		currentString = populateMultipleCardTemplate('', currentString);
 	}
 
-	return currentString + `\n• ${card.name} (${card.slot}) use \`/card ${card.name} (${card.slot})\``;
+	return currentString + `\n• ${card.name} (${card.slot}) use \`/card ${card.name} (${card.slot})\` or \`/card #id ${card.id}\``;
 }
 
 function createResponseObject(data) {
@@ -93,11 +109,11 @@ function getImageAttachment(image) {
 	/*eslint-enable camelcase */
 }
 
-function convertCardToResponse(card) {
+function convertCardToResponse(card, isPrivate) {
 	let responseData = {
 		text:      populateTemplate(card),
 		image:     card.image,
-		isPrivate: false
+		isPrivate
 	};
 
 	return createResponseObject(responseData);
@@ -135,22 +151,42 @@ function parseFilters(queryText) {
 	return false;
 }
 
+function parseFags(queryText) {
+	// Get any requested filters
+	let flags   = queryText.match(ID_REGEX);
+	if(flags) {
+		flags = flags
+			.map((flag) => flag.replace('#', ''))
+			.map((flag) => ALLOWED_FLAGS.includes(flag) ? flag : '')
+			.filter((flag) => flag.length > 0);
+		// Store if we have any after filtering
+		return (flags.length > 0 ? flags : false);
+	}
+	return false;
+}
+
 function formatSearch(term) {
 	// Make sure we only compare in lowercase
 	term       = term.toLowerCase();
 	let filter = parseFilters(term);
+	let flags  = parseFags(term)
 	// Strip the filter string from the search text
-	term       = term.replace(FILTER_REGEX, '').trim();
+	term       = term
+		.replace(FILTER_REGEX, '')
+		.replace(ID_REGEX, '')
+		.trim();
 
 	return {
 		term,
-		filter
+		filter,
+		isPrivate: Array.isArray(flags) && flags.includes('quiet'),
+		isId:      Array.isArray(flags) && flags.includes('id')
 	};
 }
 
 function handleGoodRequest(query) {
 	const search      = formatSearch(query.text);
-	const foundCards  = findCard(search);
+	const foundCards  = searchCards(search);
 	const resultCount = foundCards.length;
 
 	if(resultCount === 0) {
@@ -159,7 +195,7 @@ function handleGoodRequest(query) {
 			isPrivate: true
 		});
 	} else if(resultCount === 1) {
-		return convertCardToResponse(foundCards[0]);
+		return convertCardToResponse(foundCards[0], search.isPrivate);
 	} else {
 		return handleMultipleCards(foundCards, query);
 	}

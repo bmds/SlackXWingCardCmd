@@ -17,6 +17,7 @@
   },
   "scripts": {
     "start": "micro -p $PORT",
+    "local": "micro",
     "lint": "eslint index.js \"**/*.js\""
   }
 }
