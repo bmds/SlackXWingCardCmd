@@ -87,7 +87,8 @@ function getImageAttachment(image) {
 	// Required names for slack
 	/*eslint-disable camelcase */
 	return [{
-		image_url: image
+		fallback: 'Image failed to load',
+		image_url: encodeURI(image)
 	}];
 	/*eslint-enable camelcase */
 }
