@@ -70,7 +70,7 @@ function populateTemplate(card) {
 	let limited = card.limited ? ' | limited' : '';
 	let unique  = card.unique ? ' | unique' : '';
 
-	return `${card.name} (${card.slot}${limited}${unique}) - ${card.points}pt${card.points > 1 ? 's': ''}
+	return `${card.name} (${card.slot}${limited}${unique}): ${card.points}pt${card.points > 1 ? 's': ''}
 ${card.text}`;
 }
 
