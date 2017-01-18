@@ -7,12 +7,17 @@ function handleBadRequest() {
 	return 'There was an error with the request';
 }
 
+function handleGoodRequest(response, res) {
+	send(res, 200, response)
+}
+
 module.exports = async function BaseHandler(req, res) {
 	const query = qs.parse(url.parse(req.url).query);
 
 	if(!query.text) {
 		send(res, 200, handleBadRequest(query));
 	} else {
-		send(res, 200, search(query));
+		search(query)
+			.then((response) => handleGoodRequest(response, res));
 	}
 }
