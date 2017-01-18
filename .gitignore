@@ -10,3 +10,7 @@ logfile.txt
 
 # Dependencies
 node_modules
+
+#local config
+.env
+/tools/env.sh
