@@ -25,7 +25,10 @@ PORT=1234
 
 The additional variable is for the private key as Heroku local doesn't currently support multiline vars. You will need to export this manually. On OS X a demo bash script can be found in tools/env.demo.sh.
 
-To run the site locally use the command `heroku local`
+To run the site locally use the command `heroku local`, this will use the local variables set in `.env` and run the site.
+
+## Testing
+The project is tested using [AVA](https://github.com/avajs/ava), to run the tests use `npm test`.
 
 ## Deployment
 Make sure that the correct environment variables are set in the Heroku environment you are deploying to then use `git push heroku master` to deploy to Heroku.
