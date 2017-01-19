@@ -2,6 +2,7 @@
   "name": "SlackXWingCardCmd",
   "version": "1.0.0",
   "description": "Card command for slack that gives details of the specified card in XWing",
+  "repository": "https://github.com/bmds/SlackXWingCardCmd.git",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
