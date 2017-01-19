@@ -14,7 +14,16 @@ All of the data for the cards is imported from: [X-Wing Data](https://github.com
 The service uses : [X-Wing Data](https://github.com/guidokessels/xwing-data)
 
 ## Local dev
-All but one of the environment variables are stored in a `.env` file in the root of the project. You will need to create this yourself or get it from someone else on the project. The additional variable is for the private key as Heroku local doesn't currently support multiline vars. You will need to export this manually.
+All but one of the environment variables are stored in a `.env` file in the root of the project. You will need to create this yourself or get it from someone else on the project. The structure of the file is as follows:
+```
+PROJECT_ID=some-id
+KEY_ID=blahblahkey
+CLIENT_EMAIL=firebase@some-id.iam.gserviceaccount.com
+CLIENT_ID=123456789
+PORT=1234
+```
+
+The additional variable is for the private key as Heroku local doesn't currently support multiline vars. You will need to export this manually. On OS X a demo bash script can be found in tools/env.demo.sh.
 
 To run the site locally use the command `heroku local`
 
