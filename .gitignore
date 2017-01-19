@@ -13,4 +13,5 @@ node_modules
 
 #local config
 .env
+.env.local
 /tools/env.sh
