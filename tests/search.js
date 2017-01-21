@@ -34,6 +34,18 @@ function mockChild(cardId) {
 }
 
 function cardData() {
+	return [
+		{
+			name:   'Autothrusters',
+			key:    'autothrusters',
+			id:     188,
+			slot:   'Modification',
+			points: 2,
+			text:   'When defending',
+			image:  'http://upgrades/Modification/autothrusters.png',
+			xws:    'autothrusters'
+		}
+	];
 }
 
 function slotData() {
@@ -74,11 +86,41 @@ let mockFirebase = {
 	}
 };
 
+function getResponseObj(text, image, isPrivate = false) {
+	// Required names for slack
+	/*eslint-disable camelcase */
+	return {
+		parse:         'full',
+		text:          text,
+		unfurl_media:  true,
+		response_type: (isPrivate ? 'ephemeral' : 'in_channel'),
+		attachments:   [{
+			fallback:  'Image failed to load',
+			image_url: image
+		}]
+	};
+	/*eslint-enable camelcase */
+}
+
 test.before(t => {
 	search.setDb(mockFirebase);
 });
 
-test.todo('search - basic text');
+test('search - basic text', async t => {
+	t.plan(1);
+
+	return search.run({text: 'autothrusters'})
+		.then(r => {
+			t.deepEqual(
+				getResponseObj(
+					'Autothrusters (Modification): 2pts\nWhen defending',
+					'http://upgrades/Modification/autothrusters.png'
+				),
+				r
+			)
+		});
+});
+
 test.todo('search - basic text - no result');
 test.todo('search - basic text - quiet');
 
@@ -87,30 +129,18 @@ test.todo('search - basic text with condition filter');
 test.todo('search - basic text with modification filter');
 test.todo('search - basic text with filter (invalid)');
 
-// Required names for slack
-/*eslint-disable camelcase */
-const validIdResponse = {
-	parse:         'full',
-	text:          'R2-F2 (astromech | unique): 3pts\nshorter',
-	unfurl_media:  true,
-	attachments:   [{
-		fallback:  'Image failed to load',
-		image_url: 'https://r2-f2.png'
-	}]
-};
-/*eslint-enable camelcase */
-
 test('search - id', async t => {
 	t.plan(1);
 
 	return search.run({text: '#id 4u'})
 		.then(r => {
-			// Required names for slack
-			/*eslint-disable camelcase */
-			validIdResponse.response_type = 'in_channel';
-			/*eslint-enable camelcase */
-
-			t.deepEqual(validIdResponse, r)
+			t.deepEqual(
+				getResponseObj(
+					'R2-F2 (astromech | unique): 3pts\nshorter',
+					'https://r2-f2.png'
+				),
+				r
+			);
 		});
 });
 
@@ -119,12 +149,14 @@ test('search - id - quiet', async t => {
 
 	return search.run({text: '#id 4u #quiet'})
 		.then(r => {
-			// Required names for slack
-			/*eslint-disable camelcase */
-			validIdResponse.response_type = 'ephemeral';
-			/*eslint-enable camelcase */
-
-			t.deepEqual(validIdResponse, r)
+			t.deepEqual(
+				getResponseObj(
+					'R2-F2 (astromech | unique): 3pts\nshorter',
+					'https://r2-f2.png',
+					true
+				),
+				r
+			);
 		});
 });
 
