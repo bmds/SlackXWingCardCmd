@@ -1,5 +1,5 @@
 import test from 'ava';
-import {checkEquality, arrayToObject, cardId} from '../lib/utilities';
+import {arrayToObject, cardId} from '../lib/utilities';
 
 // Card ID tests
 test('card id pilot', async t => {
