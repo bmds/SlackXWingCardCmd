@@ -123,10 +123,42 @@ test('upgrade - basic', async t => {
 			text:   'When attacking a ship inside your firing arc',
 			image:  'http://upgrades/Elite/crack-shot.png',
 			xws:    'crackshot',
+			alias:  false
 		},
 		upgrade(testData, 'http://')
 	);
 });
+
+test('upgrade - alias', async t => {
+	const testData = {
+		name:   'BB-8',
+		key:    'bb-8',
+		id:     144,
+		unique: true,
+		slot:   'Astromech',
+		points: 2,
+		text:   'When you reveal a green maneuver, you may perform a free barrel roll action.',
+		image:  'upgrades/Astromech/bb-8.png',
+		xws:    'bb8'
+	};
+
+	t.deepEqual(
+		{
+			name: 'BB-8',
+			key: 'bb-8',
+			id: 144,
+			unique: true,
+			slot:   'astromech',
+			points: 2,
+			text:   'When you reveal a green maneuver, you may perform a free barrel roll action.',
+			image:  'http://upgrades/Astromech/bb-8.png',
+			xws:    'bb8',
+			alias:  ['bb8']
+		},
+		upgrade(testData, 'http://')
+	);
+});
+
 test.todo('upgrade - has ship');
 test.todo('upgrade - has conditions');
 test.todo('upgrade - has size');
@@ -141,7 +173,6 @@ test('condition - basic', async t => {
 	const testData = {
 		image:  'conditions/a-debt-to-pay.png',
 		text:   `When attacking a ship that has the \"A Score to Settle\" Upgrade card, you may change 1 [Focus] result to a [Critical Hit] result.`,
-		text:   `When attacking a ship that has the \'A Score to Settle\' Upgrade card, you may change 1 [Focus] result to a [Critical Hit] result.`,
 		name:   'A Debt to Pay',
 		xws:    'adebttopay',
 		unique: true,
