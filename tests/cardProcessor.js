@@ -43,8 +43,8 @@ test('slackify - with linebreak', async t => {
 
 test('slackify - complex string', async t => {
 	t.is(
-		'After you are *destroyed*, before you are [removed] from the "play area", you may *deploy* the _Nastah Pup_ Pilot.\nIt _cannot_ attack this round.',
-		_slackifyText('After you are <b>destroyed</b>, before you are [removed] from the \"play area\", you may <strong>deploy</strong> the <em>Nastah Pup</em> Pilot.<br /><br />It <i>cannot</i> attack this round.')
+		'After you are *destroyed*, before you are [removed] from the \'play area\', you may *deploy* the _Nastah Pup_ Pilot.\nIt _cannot_ attack this round.',
+		_slackifyText('After you are <b>destroyed</b>, before you are [removed] from the \'play area\', you may <strong>deploy</strong> the <em>Nastah Pup</em> Pilot.<br /><br />It <i>cannot</i> attack this round.')
 	);
 });
 
@@ -102,7 +102,31 @@ test('process - no text', async t => {
 	t.is('other *text*', _processCard(testData, '')['effect']);
 });
 
-test.todo('upgrade - basic');
+test('upgrade - basic', async t => {
+	const testData = {
+		name:   'Crack Shot',
+		id:     141,
+		slot:   'Elite',
+		points: 1,
+		text:   'When attacking a ship inside your firing arc',
+		image:  'upgrades/Elite/crack-shot.png',
+		xws:    'crackshot'
+	};
+
+	t.deepEqual(
+		{
+			name:   'Crack Shot',
+			key:    'crack shot',
+			id:     141,
+			slot:   'elite',
+			points: 1,
+			text:   'When attacking a ship inside your firing arc',
+			image:  'http://upgrades/Elite/crack-shot.png',
+			xws:    'crackshot',
+		},
+		upgrade(testData, 'http://')
+	);
+});
 test.todo('upgrade - has ship');
 test.todo('upgrade - has conditions');
 test.todo('upgrade - has size');
@@ -117,6 +141,7 @@ test('condition - basic', async t => {
 	const testData = {
 		image:  'conditions/a-debt-to-pay.png',
 		text:   `When attacking a ship that has the \"A Score to Settle\" Upgrade card, you may change 1 [Focus] result to a [Critical Hit] result.`,
+		text:   `When attacking a ship that has the \'A Score to Settle\' Upgrade card, you may change 1 [Focus] result to a [Critical Hit] result.`,
 		name:   'A Debt to Pay',
 		xws:    'adebttopay',
 		unique: true,
