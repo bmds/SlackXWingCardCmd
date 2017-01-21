@@ -21,11 +21,18 @@ app.use(bodyParser.json());
 // ROUTES FOR OUR API
 router.route('/slash')
 	.post((req, res) => {
-		if(req.body.import && req.body.import === 'yoda') {
-			dataImport.run()
-				.then((response) => res.json(response));
-		} else if(req.body.text) {
+		if(req.body.text) {
 			search.run(req.body)
+				.then((response) => res.json(response));
+		} else {
+			res.send('There was an error with the request');
+		}
+	});
+
+router.route('/import')
+	.get((req, res) => {
+		if(req.query.import && req.query.import === 'yoda') {
+			dataImport.run()
 				.then((response) => res.json(response));
 		} else {
 			res.send('There was an error with the request');
