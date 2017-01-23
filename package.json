@@ -23,11 +23,16 @@
   "scripts": {
     "start": "node index.js",
     "lint": "eslint index.js \"**/*.js\"",
-    "test": "ava"
+    "test": "ava",
+    "test:watch": "ava --watch"
   },
   "ava": {
     "files": [
       "tests/*.js"
-    ]
+	],
+	"source": [
+		"lib/*.js",
+		"index.js"
+	]
   }
 }
