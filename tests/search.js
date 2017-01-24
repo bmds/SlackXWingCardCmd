@@ -113,7 +113,7 @@ test('search - basic text', async t => {
 		.then(r => {
 			t.deepEqual(
 				getResponseObj(
-					'Autothrusters (Modification): 2pts\nWhen defending',
+					'Autothrusters (:modification: Modification): 2pts\nWhen defending',
 					'http://upgrades/Modification/autothrusters.png'
 				),
 				r
