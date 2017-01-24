@@ -90,7 +90,7 @@ test('single card - with effect', async t => {
 		effect: 'effect text'
 	};
 
-	let output = `Proton Bombs (bomb): 5pts
+	let output = `Proton Bombs (:xbomb: bomb): 5pts
 description text
 > effect text`;
 
