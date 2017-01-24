@@ -17,6 +17,10 @@ test('emoji - get - bank left', async t => {
 	t.is(':bankleft:', emoji.get('bank left'));
 });
 
+test('emoji - get - astromech', async t => {
+	t.is(':astromech:', emoji.get('astromech'));
+});
+
 test('emoji - get - bank right', async t => {
 	t.is(':bankright:', emoji.get('bank right'));
 });
@@ -95,6 +99,14 @@ test('emoji - get - salvaged astromech', async t => {
 
 test('emoji - get - slam', async t => {
 	t.is(':slam:', emoji.get('slam'));
+});
+
+test('emoji - get - s loop left', async t => {
+	t.is(':sloopleft:', emoji.get('s loop left'));
+});
+
+test('emoji - get - s loop right', async t => {
+	t.is(':sloopright:', emoji.get('s loop right'));
 });
 
 test('emoji - get - stop', async t => {

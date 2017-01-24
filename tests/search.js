@@ -113,7 +113,7 @@ test('search - basic text', async t => {
 		.then(r => {
 			t.deepEqual(
 				getResponseObj(
-					'Autothrusters (:modification: Modification): 2pts\nWhen defending',
+					'Autothrusters (:modification:): 2pts\nWhen defending',
 					'http://upgrades/Modification/autothrusters.png'
 				),
 				r
@@ -136,7 +136,7 @@ test('search - id', async t => {
 		.then(r => {
 			t.deepEqual(
 				getResponseObj(
-					'R2-F2 (astromech | unique): 3pts\nshorter',
+					'R2-F2 (:astromech: | unique): 3pts\nshorter',
 					'https://r2-f2.png'
 				),
 				r
@@ -151,7 +151,7 @@ test('search - id - quiet', async t => {
 		.then(r => {
 			t.deepEqual(
 				getResponseObj(
-					'R2-F2 (astromech | unique): 3pts\nshorter',
+					'R2-F2 (:astromech: | unique): 3pts\nshorter',
 					'https://r2-f2.png',
 					true
 				),

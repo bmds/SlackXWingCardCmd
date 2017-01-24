@@ -32,7 +32,7 @@ test('single card', async t => {
 		text:   'Some text'
 	};
 
-	t.is(`R2-F2 (astromech): 3pts\nSome text`, card(cardData));
+	t.is(`R2-F2 (:astromech:): 3pts\nSome text`, card(cardData));
 });
 
 test('single card - limited', async t => {
@@ -44,7 +44,7 @@ test('single card - limited', async t => {
 		limited: true
 	};
 
-	t.is(`R2-F2 (astromech | limited): 3pts\nSome text`, card(cardData));
+	t.is(`R2-F2 (:astromech: | limited): 3pts\nSome text`, card(cardData));
 });
 
 test('single card - unique', async t => {
@@ -56,7 +56,7 @@ test('single card - unique', async t => {
 		unique: true
 	};
 
-	t.is(`R2-F2 (astromech | unique): 3pts\nSome text`, card(cardData));
+	t.is(`R2-F2 (:astromech: | unique): 3pts\nSome text`, card(cardData));
 });
 
 test('single card - 1 point', async t => {
@@ -67,7 +67,7 @@ test('single card - 1 point', async t => {
 		text:   'Some text'
 	};
 
-	t.is(`R2-F2 (astromech): 1pt\nSome text`, card(cardData));
+	t.is(`R2-F2 (:astromech:): 1pt\nSome text`, card(cardData));
 });
 
 test('single card - 0 points', async t => {
@@ -78,7 +78,7 @@ test('single card - 0 points', async t => {
 		text:   'Some text'
 	};
 
-	t.is(`R2-F2 (astromech): 0pts\nSome text`, card(cardData));
+	t.is(`R2-F2 (:astromech:): 0pts\nSome text`, card(cardData));
 });
 
 test('single card - with effect', async t => {
@@ -90,7 +90,7 @@ test('single card - with effect', async t => {
 		effect: 'effect text'
 	};
 
-	let output = `Proton Bombs (:xbomb: bomb): 5pts
+	let output = `Proton Bombs (:xbomb:): 5pts
 description text
 > effect text`;
 
