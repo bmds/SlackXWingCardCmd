@@ -1,5 +1,5 @@
 import test from 'ava';
-import {upgrade, pilot, condition, _processCard, _slackifyText} from '../lib/cardProcessor';
+import {upgrade, pilot, condition, _processCard, _slackifyText} from '../src/cardProcessor';
 
 test('slackify - simple string', async t => {
 	const testText = 'You may treat all 1- and 2-speed maneuvers as green maneuvers.';

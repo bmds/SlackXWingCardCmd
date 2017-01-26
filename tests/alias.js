@@ -1,5 +1,5 @@
 import test from 'ava';
-import alias from '../lib/alias';
+import alias from '../src/alias';
 
 // test('testname', async t => {
 // 	t.is('bb8', alias._astromech('bb-8'));

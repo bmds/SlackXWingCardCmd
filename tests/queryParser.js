@@ -1,5 +1,5 @@
 import test from 'ava';
-import {format, _parseFags, _parseSlots, _formatSlots} from '../lib/queryParser';
+import {format, _parseFags, _parseSlots, _formatSlots} from '../src/queryParser';
 
 function slotData() {
 	return [

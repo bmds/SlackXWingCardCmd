@@ -1,5 +1,5 @@
 import test from 'ava';
-import search from '../lib/search';
+import search from '../src/search';
 
 const validIdData = {
 	id:     4,

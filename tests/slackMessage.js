@@ -1,5 +1,5 @@
 import test from 'ava';
-import slackMessage from '../lib/slackMessage';
+import slackMessage from '../src/slackMessage';
 
 const RESPONSE_PUBLIC  = 'in_channel';
 const RESPONSE_PRIVATE = 'ephemeral';

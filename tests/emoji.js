@@ -1,5 +1,5 @@
 import test from 'ava';
-import emoji from '../lib/emoji';
+import emoji from '../src/emoji';
 
 test('emoji - replace - nothing to replace', async t => {
 	t.is('hey some string', emoji.replace('hey some string'));

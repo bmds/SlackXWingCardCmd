@@ -1,5 +1,5 @@
 import test from 'ava';
-import {card, multiple, notFound} from '../lib/templates';
+import {card, multiple, notFound} from '../src/templates';
 
 test('not found', async t => {
 	let text = 'cheese';
