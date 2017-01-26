@@ -2,8 +2,8 @@ const express    = require('express');
 const bodyParser = require('body-parser');
 
 const firebase   = require('./src/firebase');
-const search     = require('./src/search');
-const dataImport = require('./src/import');
+const search     = require('./app/search');
+const dataImport = require('./app/import');
 
 const port   = process.env.PORT || 3000;
 const app    = express();

@@ -1,7 +1,7 @@
 const request       = require('request-promise');
 const deepEqual     = require('deep-equal');
-const utilities     = require('./utilities');
-const cardProcessor = require('./cardProcessor');
+const utilities     = require('../src/utilities');
+const cardProcessor = require('../src/cardProcessor');
 
 const REPO_BASE        = 'https://raw.githubusercontent.com/guidokessels/xwing-data/master';
 const UPGRADE_SOURCE   = `${REPO_BASE}/data/upgrades.js`;

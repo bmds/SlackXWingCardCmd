@@ -1,6 +1,6 @@
-const slackMessage = require('./slackMessage');
-const templates    = require('./templates');
-const queryParser  = require('./queryParser');
+const slackMessage = require('../src/slackMessage');
+const templates    = require('../src/templates');
+const queryParser  = require('../src/queryParser');
 
 let firebase;
 
