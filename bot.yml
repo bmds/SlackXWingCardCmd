@@ -1,4 +1,31 @@
-name: gonk
+name: Gonk
+author: Barney Scott
 description: ☝️☝️ Check out the README ☝️☝️ in the repo for setup instructions. By the way, this is just the description in the bot.yml file - feel free to change it 😉
 avatar: .beepboop/avatar.jpg
-# To learn everything supported in the bot.yml file, visit https://beepboophq.com/docs/article/bot-yml
+slackscopes:
+  - bot
+  - commands
+  - incoming-webhook
+config:
+  - name: FIRE_PROJECT_ID
+    friendly_name: Firebase project ID
+    info: ID of the project on Firebase
+    default:
+    type: secret
+    global: true
+  - name: FIRE_KEY_ID
+    friendly_name: Firebase key ID
+    info: Key of the project on Firebase
+    default:
+    type: secret
+    global: true
+  - name: FIRE_CLIENT_EMAIL
+    friendly_name: Firebase client email
+    info: Firebase client email
+    type: secret
+    global: true
+  - name: FIRE_CLIENT_ID
+    friendly_name: Firebase client ID
+    info: Yes
+    type: secret
+    global: true
