@@ -6,10 +6,16 @@ const ALLOWED_FLAGS = [
 	'quiet'
 ];
 
+
+
 function formatSlots(slot, validSlots) {
 	slot = slot.replace(/\(|\)/g, '')
 		.trim()
 		.toLowerCase();
+
+	// if(slot.match(/:(\w)+:/)) {
+	// 	emoji
+	// }
 
 	if(!validSlots().includes(slot)) {
 		slot = '';

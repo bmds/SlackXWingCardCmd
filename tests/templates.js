@@ -8,20 +8,9 @@ test('not found', async t => {
 });
 
 test('multiple', async t => {
-	let cards = [
-		{ name: 'Autoblaster Turret', slot: 'turret', id: 116 },
-		{ name: 'Autothrusters', slot: 'modification', id: 188 },
-		{ name: 'Automated Protocols', slot: 'modification', id: 202 },
-		{ name: 'Autoblaster', slot: 'cannon', id: 35 }
-	];
+	let response = `I found more than one card matching *'auto'*`;
 
-	let response = `I found more than one card matching *'auto'*:
-• *Autoblaster Turret* (turret) use \`/card Autoblaster Turret (turret)\` or \`/card #id 116u\`
-• *Autothrusters* (modification) use \`/card Autothrusters (modification)\` or \`/card #id 188u\`
-• *Automated Protocols* (modification) use \`/card Automated Protocols (modification)\` or \`/card #id 202u\`
-• *Autoblaster* (cannon) use \`/card Autoblaster (cannon)\` or \`/card #id 35u\``;
-
-	t.is(response, multiple(cards, {text: 'auto'}));
+	t.is(response, multiple({text: 'auto'}));
 });
 
 test('single card', async t => {

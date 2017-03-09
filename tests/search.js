@@ -1,123 +1,28 @@
 import test from 'ava';
-import search from '../app/search';
+import mockery from 'mockery';
+import mockFirebase from './mocks/firebase';
 
-const validIdData = {
-	id:     4,
-	image:  'https://r2-f2.png',
-	key:    'r2-f2',
-	name:   'R2-F2',
-	points: 3,
-	slot:   'astromech',
-	text:   'shorter',
-	unique: true,
-	xws:    'r2f2'
-};
+let search;
 
-function makeSnapshot(data) {
-	return {
-		val: () => data
-	};
-}
+test.before(() => {
+	mockery.enable();
+	mockery.registerMock('../src/firebase', mockFirebase);
+	search = require('../app/search');
+});
 
-function makeOnce(aPromise) {
-	return {
-		once: () => aPromise
-	};
-}
-
-function mockChild(cardId) {
-	return makeOnce(new Promise((resolve) => {
-		if(cardId === '4u') {
-			resolve(makeSnapshot(validIdData));
-		}
-	}));
-}
-
-function cardData() {
-	return [
-		{
-			name:   'Autothrusters',
-			key:    'autothrusters',
-			id:     188,
-			slot:   'Modification',
-			points: 2,
-			text:   'When defending',
-			image:  'http://upgrades/Modification/autothrusters.png',
-			xws:    'autothrusters'
-		}
-	];
-}
-
-function slotData() {
-	return {
-		astromech:            1,
-		bomb:                 1,
-		cannon:               1,
-		cargo:                1,
-		condition:            1,
-		crew:                 1,
-		elite:                1,
-		hardpoint:            1,
-		illicit:              1,
-		missile:              1,
-		modification:         1,
-		pilot:                1,
-		'salvaged astromech': 1,
-		system:               1,
-		team:                 1,
-		tech:                 1,
-		title:                1,
-		torpedo:              1,
-		turret:               1
-	};
-}
-
-let mockFirebase = {
-	refs: {
-		cards: {
-			child: mockChild
-		}
-	},
-	cards: {
-		data: cardData
-	},
-	slots: {
-		data: slotData
-	}
-};
-
-function getResponseObj(text, image, isPrivate = false) {
-	// Required names for slack
-	/*eslint-disable camelcase */
-	return {
-		parse:         'full',
-		text:          text,
-		unfurl_media:  true,
-		response_type: (isPrivate ? 'ephemeral' : 'in_channel'),
-		attachments:   [{
-			fallback:  'Image failed to load',
-			image_url: image
-		}]
-	};
-	/*eslint-enable camelcase */
-}
-
-test.before(t => {
-	search.setDb(mockFirebase);
+test.after(() => {
+	mockery.disable();
 });
 
 test('search - basic text', async t => {
 	t.plan(1);
 
-	return search.run({text: 'autothrusters'})
+	return search.byText({term: 'autothrusters'})
 		.then(r => {
 			t.deepEqual(
-				getResponseObj(
-					'Autothrusters (:modification:): 2pts\nWhen defending',
-					'http://upgrades/Modification/autothrusters.png'
-				),
+				[mockFirebase.testData.validCardData],
 				r
-			)
+			);
 		});
 });
 
@@ -132,33 +37,33 @@ test.todo('search - basic text with filter (invalid)');
 test('search - id', async t => {
 	t.plan(1);
 
-	return search.run({text: '#id 4u'})
+	return search.byId('4u')
 		.then(r => {
 			t.deepEqual(
-				getResponseObj(
-					'R2-F2 (:astromech: | unique): 3pts\nshorter',
-					'https://r2-f2.png'
-				),
+				[mockFirebase.testData.validIdData],
 				r
 			);
 		});
 });
-
-test('search - id - quiet', async t => {
-	t.plan(1);
-
-	return search.run({text: '#id 4u #quiet'})
-		.then(r => {
-			t.deepEqual(
-				getResponseObj(
-					'R2-F2 (:astromech: | unique): 3pts\nshorter',
-					'https://r2-f2.png',
-					true
-				),
-				r
-			);
-		});
-});
+//
+// test('search - id - quiet', async t => {
+// 	t.plan(1);
+//
+// 	return search.byId({
+// 		term:      '4u',
+// 		isPrivate: true
+// 	})
+// 		.then(r => {
+// 			t.deepEqual(
+// 				getResponseObj(
+// 					'R2-F2 (:astromech: | unique): 3pts\nshorter',
+// 					'https://r2-f2.png',
+// 					true
+// 				),
+// 				r
+// 			);
+// 		});
+// });
 
 test.todo('search - id (invalid)');
 

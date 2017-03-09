@@ -22,11 +22,10 @@ const templates = {
 	card: (card) => `${cardIntro(card)}\n${card.text}${effect(card.effect)}`,
 
 	// Template for multiple cards
-	multiple: (cards, query) => {
-		let cardString = cards.reduce(cardReduce);
+	multiple: (query) => `I found more than one card matching *'${query.text}'*`,
 
-		return `I found more than one card matching *'${query.text}'*:${cardString}`;
-	},
+	// action: (card) => `${emoji.get(card.slot)} ${card.name}`,
+	action: (card) => `:grinning: ${card.name}`,
 
 	// Template for no results
 	notFound: (query) => `Sorry i couldn't find a card for *'${query.text}'*`

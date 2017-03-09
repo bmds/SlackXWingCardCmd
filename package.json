@@ -8,6 +8,7 @@
   "dependencies": {
     "async-file": "^2.0.2",
     "body-parser": "^1.16.0",
+    "debug": "^2.6.0",
     "deep-equal": "^1.0.1",
     "express": "^4.14.0",
     "firebase-admin": "^4.0.4",
@@ -21,10 +22,13 @@
   "devDependencies": {
     "ava": "^0.17.0",
     "babel-eslint": "6",
-    "eslint": "^3.13.1"
+    "dotenv": "^4.0.0",
+    "eslint": "^3.13.1",
+    "mockery": "^2.0.0"
   },
   "scripts": {
     "start": "node server.js",
+    "local": "node -r dotenv/config server.js",
     "lint": "eslint index.js \"**/*.js\"",
     "test": "ava",
     "test:watch": "ava --watch"

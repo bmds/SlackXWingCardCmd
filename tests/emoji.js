@@ -160,3 +160,11 @@ test('emoji - get - turret', async t => {
 test('emoji - get - unknown', async t => {
 	t.false(emoji.get('cat'));
 });
+
+test('emoji - isEmoji - string', async t => {
+	t.false(emoji.isEmoji('cat'));
+});
+
+test('emoji - isEmoji - unknown', async t => {
+	t.false(emoji.isEmoji(':cat:'));
+});
